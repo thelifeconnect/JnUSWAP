@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদ, জগন্নাথ বিশ্ববিদ্যালয় — রক্তদাতা নিবন্ধন ও খোঁজ">
+<meta name="description" content="পঞ্চগড় জেলা ছাত্র কল্যাণ সংসদ, জগন্নাথ বিশ্ববিদ্যালয় — রক্তদাতা নিবন্ধন ও খোঁজ">
 <title>JnUSWAP Life Connect - Blood Donor Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,11 +34,11 @@
   .org-tag .org-line2{ display:block; font-size:0.82em; font-weight:700; }
   .hero-logo, .hero-map{
     --logo-size:88px;
-    height:var(--logo-size); width:auto; max-width:34%; object-fit:contain;
+    flex:0 0 auto; height:var(--logo-size); width:var(--logo-size); object-fit:contain;
     background:transparent; border:none; border-radius:0;
     padding:0; box-shadow:none; mix-blend-mode:multiply;
   }
-  .hero-logo, .hero-map{ max-width:18%; }
+  .hero-logo, .hero-map{ max-width:20%; }
   @media (max-width:480px){
     .hero-logo, .hero-map{ --logo-size:52px; }
   }
@@ -207,9 +207,9 @@
 
   <div class="hero">
     <div class="hero-top">
-      <img class="hero-logo" src="jnu-logo.png" alt="জগন্নাথ বিশ্ববিদ্যালয়ের লোগো" onerror="this.remove()">
+      <img class="hero-logo" src="jnu-logo.png" alt="জগন্নাথ বিশ্ববিদ্যালয়ের লোগো" onerror="this.style.visibility='hidden'">
       <div class="org-tag">পঞ্চগড় জেলা ছাত্র কল্যাণ সংসদ,<span class="org-line2">জগন্নাথ বিশ্ববিদ্যালয়, ঢাকা</span></div>
-      <img class="hero-map" src="panchagarh-map.png" alt="পঞ্চগড় জেলার মানচিত্র" onerror="this.remove()">
+      <img class="hero-map" src="panchagarh-map.png" alt="পঞ্চগড় জেলার মানচিত্র" onerror="this.style.visibility='hidden'">
     </div>
     <svg class="drop" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 2C12 2 5 11.5 5 15.5C5 19.6 8.13 22 12 22C15.87 22 19 19.6 19 15.5C19 11.5 12 2 12 2Z" fill="#A31621"/>
