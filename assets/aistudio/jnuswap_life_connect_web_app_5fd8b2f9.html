@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JnUSWAP Life Connect - পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Hind Siliguri for Bengali typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            50: '#fdf2f4',
+                            100: '#fbe5e8',
+                            600: '#a00028',
+                            700: '#800020',
+                            800: '#630018',
+                            900: '#480011',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #faf5f5;
+        }
+
+        /* Custom Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Pulse Animation for Live Tag */
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+        .live-pulse {
+            animation: pulse-red 1.5s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #800020;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- TOP HEADER BAR -->
+    <header class="bg-white border-b border-rose-100 shadow-sm sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-12 h-12 rounded-full bg-maroon-700 flex items-center justify-center text-white font-bold text-xl shadow-md border-2 border-rose-200">
+                    <i class="fa-solid fa-droplet text-red-400 text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-maroon-700 tracking-tight leading-tight">
+                        JnUSWAP <span class="text-gray-900 font-normal">Life Connect</span>
+                    </h1>
+                    <p class="text-xs text-gray-500 font-medium">পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদ, জবি</p>
+                </div>
+            </div>
+            
+            <div class="hidden sm:block">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-maroon-800 border border-rose-200">
+                    <i class="fa-solid fa-heart-pulse mr-1 text-red-600"></i> রক্তদান হোক আমাদের বন্ধন
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-4xl mx-auto px-3 sm:px-4 py-6 w-full flex-grow">
+
+        <!-- SUB-HEADER BADGE / TAGLINE -->
+        <div class="text-center mb-6">
+            <span class="inline-block bg-rose-100 text-maroon-800 text-sm font-semibold px-4 py-1.5 rounded-full border border-rose-200 shadow-sm">
+                রক্তদান হোক আমাদের বন্ধন — পঞ্চগড়
+            </span>
+        </div>
+
+        <!-- TAB NAVIGATION (Become Donor vs Find Donor) -->
+        <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-rose-100 flex mb-6">
+            <button id="tab-become" onclick="switchMainTab('become')" class="flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-gray-600 hover:text-maroon-700">
+                <i class="fa-solid fa-user-plus mr-1"></i> দাতা হন
+            </button>
+            <button id="tab-find" onclick="switchMainTab('find')" class="flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 bg-maroon-700 text-white shadow-md">
+                <i class="fa-solid fa-magnifying-glass-location mr-1"></i> দাতা খুঁজুন
+            </button>
+        </div>
+
+        <!-- SECTION 1: FIND DONOR VIEW (ACTIVE DEFAULT) -->
+        <div id="view-find-donor" class="space-y-6">
+
+            <!-- SEARCH & FILTER BOX -->
+            <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-rose-100">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-bold text-maroon-800 flex items-center">
+                        <i class="fa-solid fa-filter text-maroon-700 mr-2"></i> রক্তদাতা খুঁজুন
+                    </h2>
+                    <span class="text-xs text-gray-500">ফিল্টার প্রয়োগ করুন</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">রক্তের গ্রুপ, উপজেলা, বিভাগ বা ব্যাচ দিয়ে দ্রুত খুঁজুন।</p>
+
+                <!-- DROPDOWN FILTERS GRID -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
+                    <select id="filter-group" onchange="applyFilters()" class="w-full bg-rose-50/50 border border-rose-200 text-gray-700 text-xs sm:text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        <option value="">সকল গ্রুপ</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+
+                    <select id="filter-upazila" onchange="applyFilters()" class="w-full bg-rose-50/50 border border-rose-200 text-gray-700 text-xs sm:text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        <option value="">সকল উপজেলা</option>
+                        <option value="পঞ্চগড় সদর">পঞ্চগড় সদর</option>
+                        <option value="দেবীগঞ্জ">দেবীগঞ্জ</option>
+                        <option value="বোদা">বোদা</option>
+                        <option value="আটোয়ারী">আটোয়ারী</option>
+                        <option value="তেঁতুলিয়া">তেঁতুলিয়া</option>
+                    </select>
+
+                    <select id="filter-dept" onchange="applyFilters()" class="w-full bg-rose-50/50 border border-rose-200 text-gray-700 text-xs sm:text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        <option value="">সকল বিভাগ</option>
+                        <option value="বাংলা">বাংলা</option>
+                        <option value="Statistics">Statistics</option>
+                        <option value="Sociology">Sociology</option>
+                        <option value="Political Science">Political Science</option>
+                        <option value="CSE">CSE</option>
+                    </select>
+
+                    <select id="filter-batch" onchange="applyFilters()" class="w-full bg-rose-50/50 border border-rose-200 text-gray-700 text-xs sm:text-sm rounded-xl p-2.5 focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        <option value="">সকল ব্যাচ</option>
+                        <option value="13th Batch">13th Batch</option>
+                        <option value="16th Batch">16th Batch</option>
+                        <option value="20th Batch">20th Batch</option>
+                        <option value="21th Batch">21th Batch</option>
+                    </select>
+                </div>
+
+                <!-- SMART DONOR TYPE SELECTION TABS -->
+                <div class="pt-2 border-t border-rose-100">
+                    <label class="block text-xs font-bold text-gray-600 mb-2">উপাদান অনুযায়ী দ্রুত ফিল্টার (Smart Component Filter):</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setComponentFilter('all')" id="comp-all" class="comp-btn active text-xs font-semibold px-3 py-1.5 rounded-full border border-maroon-700 bg-maroon-700 text-white transition-all">
+                            সবাই
+                        </button>
+                        <button onclick="setComponentFilter('whole')" id="comp-whole" class="comp-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-300 bg-gray-50 text-gray-700 hover:border-red-400 transition-all">
+                            🔴 হোল ব্লাড প্রস্তুত
+                        </button>
+                        <button onclick="setComponentFilter('plasma')" id="comp-plasma" class="comp-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-300 bg-gray-50 text-gray-700 hover:border-amber-400 transition-all">
+                            🟠 প্লাজমা প্রস্তুত
+                        </button>
+                        <button onclick="setComponentFilter('platelet')" id="comp-platelet" class="comp-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-300 bg-gray-50 text-gray-700 hover:border-yellow-500 transition-all">
+                            🟡 প্লেটলেট প্রস্তুত
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DONOR COUNT SUMMARY BAR -->
+            <div class="flex items-center justify-between px-1">
+                <p id="donor-count-text" class="text-xs sm:text-sm font-semibold text-gray-600">
+                    ১৫ জন দাতা পাওয়া গেছে
+                </p>
+                <span class="text-xs text-gray-400"><i class="fa-solid fa-bolt text-amber-500"></i> লাইভ আপডেট স্ট্যাটাস</span>
+            </div>
+
+            <!-- SMART DONOR CARDS LIST CONTAINER -->
+            <div id="donor-list-container" class="space-y-3.5">
+                <!-- Dynamic cards populated via JavaScript -->
+            </div>
+
+        </div>
+
+        <!-- SECTION 2: BECOME DONOR FORM (HIDDEN BY DEFAULT) -->
+        <div id="view-become-donor" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose-100">
+                <h2 class="text-lg font-bold text-maroon-800 mb-2">স্বেচ্ছায় রক্তদাতা নিবন্ধন ফর্ম</h2>
+                <p class="text-xs text-gray-500 mb-5">আপনার তথ্য দিয়ে পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদের ব্লাড ব্যাংকে যুক্ত হন।</p>
+                
+                <form onsubmit="handleRegistration(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">আপনার পূর্ণ নাম *</label>
+                            <input type="text" required placeholder="যেমন: পাপুন অধিকারী" class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">রক্তের গ্রুপ *</label>
+                            <select required class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                                <option value="">নির্বাচন করুন</option>
+                                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                                <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">লিঙ্গ *</label>
+                            <select id="reg-gender" required class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                                <option value="male">পুরুষ (Male)</option>
+                                <option value="female">নারী (Female)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">মোবাইল নম্বর *</label>
+                            <input type="tel" required placeholder="017xxxxxxxx" class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">উপজেলা *</label>
+                            <select required class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                                <option value="">উপজেলা বেছে নিন</option>
+                                <option>পঞ্চগড় সদর</option><option>দেবীগঞ্জ</option><option>বোদা</option><option>আটোয়ারী</option><option>তেঁতুলিয়া</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">বিভাগ ও ব্যাচ *</label>
+                            <input type="text" required placeholder="যেমন: বাংলা - 16th Batch" class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">সর্বশেষ রক্তদানের তারিখ <span class="text-gray-400 font-normal">(ঐচ্ছিক - আগে রক্ত না দিলে খালি রাখুন)</span></label>
+                        <input type="date" id="reg-last-date" class="w-full border border-rose-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-maroon-700 focus:outline-none">
+                    </div>
+
+                    <button type="submit" class="w-full bg-maroon-700 text-white font-bold py-3 rounded-xl shadow-md hover:bg-maroon-800 transition-all text-sm mt-4">
+                        <i class="fa-solid fa-check-circle mr-1"></i>নিবন্ধন সম্পন্ন করুন
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SMART TICKER & LIVE RULES BAR (REPLACED OLD MARQUEE) -->
+        <div class="mt-8 bg-gradient-to-r from-maroon-700 via-maroon-800 to-maroon-900 text-white rounded-2xl p-3 sm:p-4 shadow-md overflow-hidden relative border border-rose-300">
+            <div class="flex items-center space-x-2 space-x-reverse mb-2 sm:mb-0">
+                <span class="live-pulse bg-red-500 text-white text-[11px] font-black px-2.5 py-1 rounded-md tracking-wider flex items-center shadow-sm">
+                    <span class="w-2 h-2 bg-white rounded-full mr-1.5 animate-ping"></span>🔴 LIVE RULES
+                </span>
+                <span class="text-xs font-bold text-rose-200 hidden sm:inline">রক্তদানের সময়সীমা নির্দেশিকা:</span>
+            </div>
+
+            <!-- MARQUEE RUNNING TEXT -->
+            <div class="overflow-hidden relative w-full pt-1">
+                <div class="animate-marquee text-xs sm:text-sm font-medium text-rose-100 flex items-center space-x-8 space-x-reverse">
+                    <span>🔴 <strong>Whole Blood (সম্পূর্ণ রক্ত):</strong> 👨 পুরুষ ৩ মাস পর পর | 👩 নারী ৪ মাস পর পর</span>
+                    <span>•</span>
+                    <span>🟠 <strong>Plasma (প্লাজমা):</strong> ২ সপ্তাহ পর পর প্রদান করা যায়</span>
+                    <span>•</span>
+                    <span>🟡 <strong>Platelet (প্লেটলেট):</strong> ১ মাস পর পর প্রদান করা যায়</span>
+                    <span>•</span>
+                    <span>❤️ রক্ত দিন, জীবন বাঁচান — জবি পঞ্চগড় ছাত্রকল্যাণ সংসদ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERACTIVE ELIGIBILITY CALCULATOR WIDGET (NEW SMART FEATURE) -->
+        <div class="mt-6 bg-white p-5 rounded-2xl shadow-sm border border-rose-200">
+            <div class="flex items-center justify-between mb-3 border-b border-rose-100 pb-2">
+                <h3 class="text-base font-bold text-maroon-800 flex items-center">
+                    <i class="fa-solid fa-calculator text-amber-500 mr-2"></i> স্মার্ট ডোনেশন সময়সীমা ক্যালকুলেটর
+                </h3>
+                <span class="text-[11px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">ইনস্ট্যান্ট চেক</span>
+            </div>
+            
+            <p class="text-xs text-gray-500 mb-4">আপনার সর্বশেষ ডোনেশনের তারিখ সিলেক্ট করে জেনে নিন আপনি আবার কবে হোল ব্লাড, প্লাজমা বা প্লেটলেট দান করতে পারবেন:</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">লিঙ্গ সিলেক্ট করুন:</label>
+                    <select id="calc-gender" onchange="calculateEligibility()" class="w-full bg-rose-50/40 border border-rose-200 rounded-lg p-2 text-xs font-medium focus:outline-none">
+                        <option value="male">👨 পুরুষ (Male)</option>
+                        <option value="female">👩 নারী (Female)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">সর্বশেষ ডোনেশনের তারিখ:</label>
+                    <input type="date" id="calc-date" onchange="calculateEligibility()" class="w-full bg-rose-50/40 border border-rose-200 rounded-lg p-2 text-xs font-medium focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">ডোনেশন টাইপ:</label>
+                    <select id="calc-type" onchange="calculateEligibility()" class="w-full bg-rose-50/40 border border-rose-200 rounded-lg p-2 text-xs font-medium focus:outline-none">
+                        <option value="whole">🔴 Whole Blood (সম্পূর্ণ রক্ত)</option>
+                        <option value="plasma">🟠 Plasma (প্লাজমা)</option>
+                        <option value="platelet">🟡 Platelet (প্লেটলেট)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- RESULT DISPLAY BOX -->
+            <div id="calc-result-box" class="bg-rose-50 border border-rose-200 rounded-xl p-3.5 flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div id="calc-icon" class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <div>
+                        <h4 id="calc-status-title" class="text-sm font-bold text-emerald-800">রক্তদানের জন্য প্রস্তুত!</h4>
+                        <p id="calc-status-desc" class="text-xs text-gray-600">আপনি এখনই রক্তদান করতে পারবেন।</p>
+                    </div>
+                </div>
+                <div id="calc-next-date" class="text-right text-xs font-bold text-maroon-800">
+                    --
+                </div>
+            </div>
+        </div>
+
+        <!-- QUOTE BANNER -->
+        <div class="mt-6 bg-gradient-to-r from-rose-50 to-orange-50 border border-rose-200 rounded-2xl p-5 text-center shadow-sm">
+            <p class="text-base sm:text-lg font-bold text-maroon-800 leading-relaxed font-serif">
+                “সামান্য সহযোগিতা হয়ে উঠতে পারে একটি পরিবারের বেঁচে থাকার অনুপ্রেরণা।”
+            </p>
+            <p class="text-xs text-gray-500 mt-1 font-sans">— আপনার এক ব্যাগ রক্ত, একটি নতুন জীবন</p>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-rose-100 py-6 mt-10">
+        <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
+            <p class="text-xs font-bold text-maroon-800">
+                🩸 পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদ — জগন্নাথ বিশ্ববিদ্যালয়, ঢাকা
+            </p>
+            <p class="text-[11px] text-gray-500">
+                একটি রক্তের ব্যাগ একটি জীবন বাঁচাতে পারে। আপনার এক ফোঁটা রক্ত কারও নতুন জীবনের কারণ হতে পারে।
+            </p>
+            <div class="pt-2 text-[10px] text-gray-400">
+                © 2026 JnUSWAP Life Connect | সর্বস্বত্ব সংরক্ষিত
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // MOCK DONORS DATA WITH COMPONENT STATUSES
+        const sampleDonors = [
+            {
+                id: 1,
+                name: "পাপুন অধিকারী",
+                group: "O+",
+                gender: "male",
+                dept: "বাংলা",
+                batch: "16th Batch",
+                upazila: "দেবীগঞ্জ",
+                district: "পঞ্চগড়",
+                phone: "01700000001",
+                requireAdmin: false,
+                lastDonation: "2026-08-10", // Whole blood ready
+                plasmaLast: "2026-11-10",   // Plasma not ready until 24 Nov
+                plateletLast: "2026-10-01"  // Platelet ready
+            },
+            {
+                id: 2,
+                name: "Md. Arif Hasan",
+                group: "A+",
+                gender: "male",
+                dept: "Statistics",
+                batch: "13th Batch",
+                upazila: "পঞ্চগড় সদর",
+                district: "পঞ্চগড়",
+                phone: "01700000002",
+                requireAdmin: false,
+                lastDonation: "2026-11-01", // Whole blood not ready (needs 3 months)
+                plasmaLast: "2026-10-15",   // Plasma Ready
+                plateletLast: "2026-10-10"  // Platelet Ready
+            },
+            {
+                id: 3,
+                name: "শাহরিয়ার আদিব",
+                group: "B+",
+                gender: "male",
+                dept: "Sociology",
+                batch: "20th Batch",
+                upazila: "দেবীগঞ্জ",
+                district: "পঞ্চগড়",
+                phone: "01700000003",
+                requireAdmin: false,
+                lastDonation: "2026-06-15", // All ready
+                plasmaLast: "2026-09-01",
+                plateletLast: "2026-09-01"
+            },
+            {
+                id: 4,
+                name: "ধৃতিকা রানী",
+                group: "A+",
+                gender: "female",
+                dept: "Political Science",
+                batch: "21th Batch",
+                upazila: "আটোয়ারী",
+                district: "পঞ্চগড়",
+                phone: "",
+                requireAdmin: true,
+                lastDonation: "2026-05-10", // Female needs 4 months -> ready
+                plasmaLast: "2026-11-05",   // Plasma not ready until 19 Nov
+                plateletLast: "2026-10-20"  // Platelet ready
+            },
+            {
+                id: 5,
+                name: "তানভীর হোসেন",
+                group: "O-",
+                gender: "male",
+                dept: "CSE",
+                batch: "16th Batch",
+                upazila: "বোদা",
+                district: "পঞ্চগড়",
+                phone: "01700000005",
+                requireAdmin: false,
+                lastDonation: "2026-07-20",
+                plasmaLast: "2026-11-01",
+                plateletLast: "2026-11-01"
+            }
+        ];
+
+        let currentActiveComponent = 'all';
+
+        // INITIALIZATION
+        window.onload = function() {
+            // Set default date for calculator to 1 month ago
+            const d = new Date();
+            d.setMonth(d.getMonth() - 1);
+            document.getElementById('calc-date').value = d.toISOString().split('T')[0];
+            
+            renderDonors(sampleDonors);
+            calculateEligibility();
+        };
+
+        // TAB SWITCHING (BECOME DONOR VS FIND DONOR)
+        function switchMainTab(tab) {
+            const findView = document.getElementById('view-find-donor');
+            const becomeView = document.getElementById('view-become-donor');
+            const tabFind = document.getElementById('tab-find');
+            const tabBecome = document.getElementById('tab-become');
+
+            if(tab === 'find') {
+                findView.classList.remove('hidden');
+                becomeView.classList.add('hidden');
+                tabFind.className = "flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 bg-maroon-700 text-white shadow-md";
+                tabBecome.className = "flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-gray-600 hover:text-maroon-700";
+            } else {
+                findView.classList.add('hidden');
+                becomeView.classList.remove('hidden');
+                tabBecome.className = "flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 bg-maroon-700 text-white shadow-md";
+                tabFind.className = "flex-1 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 text-gray-600 hover:text-maroon-700";
+            }
+        }
+
+        // COMPONENT FILTER TAB (Whole / Plasma / Platelet)
+        function setComponentFilter(comp) {
+            currentActiveComponent = comp;
+            document.querySelectorAll('.comp-btn').forEach(btn => {
+                btn.className = "comp-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-300 bg-gray-50 text-gray-700 hover:border-red-400 transition-all";
+            });
+
+            const activeBtn = document.getElementById(`comp-${comp}`);
+            if(activeBtn) {
+                activeBtn.className = "comp-btn active text-xs font-semibold px-3 py-1.5 rounded-full border border-maroon-700 bg-maroon-700 text-white transition-all shadow-sm";
+            }
+
+            applyFilters();
+        }
+
+        // DATE CALCULATION HELPER
+        function getStatusInfo(lastDateStr, type, gender = 'male') {
+            if(!lastDateStr) return { ready: true, label: '🟢 প্রস্তুত' };
+
+            const lastDate = new Date(lastDateStr);
+            const now = new Date('2026-11-17'); // Using current context date
+
+            let nextEligible = new Date(lastDate);
+
+            if(type === 'whole') {
+                const months = (gender === 'female') ? 4 : 3;
+                nextEligible.setMonth(nextEligible.getMonth() + months);
+            } else if(type === 'plasma') {
+                nextEligible.setDate(nextEligible.getDate() + 14); // 2 weeks
+            } else if(type === 'platelet') {
+                nextEligible.setMonth(nextEligible.getMonth() + 1); // 1 month
+            }
+
+            if(now >= nextEligible) {
+                return { ready: true, label: '🟢 প্রস্তুত' };
+            } else {
+                const diffTime = Math.abs(nextEligible - now);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const formattedDate = nextEligible.toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' });
+                return { 
+                    ready: false, 
+                    label: `🔴 ${diffDays} দিন বাকি (${formattedDate})`,
+                    nextDateStr: formattedDate
+                };
+            }
+        }
+
+        // RENDER DONOR CARDS
+        function renderDonors(donors) {
+            const container = document.getElementById('donor-list-container');
+            container.innerHTML = '';
+
+            document.getElementById('donor-count-text').innerText = `${donors.length} জন দাতা পাওয়া গেছে`;
+
+            if(donors.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white p-8 rounded-2xl text-center text-gray-500 border border-rose-100">
+                        <i class="fa-solid fa-user-slash text-3xl text-rose-300 mb-2"></i>
+                        <p class="font-bold text-sm">কোন রক্তদাতা পাওয়া যায়নি!</p>
+                        <p class="text-xs text-gray-400 mt-1">অন্য ড্রপডাউন বা ফিল্টার সিলেক্ট করে চেষ্টা করুন।</p>
+                    </div>
+                `;
+                return;
+            }
+
+            donors.forEach(donor => {
+                const wholeStatus = getStatusInfo(donor.lastDonation, 'whole', donor.gender);
+                const plasmaStatus = getStatusInfo(donor.plasmaLast, 'plasma', donor.gender);
+                const plateletStatus = getStatusInfo(donor.plateletLast, 'platelet', donor.gender);
+
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-rose-100 hover:shadow-md transition-all duration-200">
+                        <div class="flex items-start justify-between">
+                            
+                            <!-- LEFT: BLOOD GROUP BADGE & INFO -->
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="w-12 h-12 rounded-xl bg-maroon-700 text-white font-black text-lg flex items-center justify-center shadow-md flex-shrink-0">
+                                    ${donor.group}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-base text-gray-800 leading-tight">${donor.name}</h3>
+                                    <p class="text-xs text-gray-500 mt-0.5">${donor.dept} - ${donor.batch}</p>
+                                    <p class="text-xs text-gray-600 font-medium mt-1">
+                                        <i class="fa-solid fa-location-dot text-maroon-700 mr-1"></i>${donor.upazila}, ${donor.district}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT: ACTION BUTTON -->
+                            <div>
+                                ${donor.requireAdmin ? `
+                                    <button onclick="alert('অ্যাডমিনের মাধ্যমে যোগাযোগ করুন: 01700000000')" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold px-3 py-2 rounded-xl transition-all text-center flex items-center">
+                                        <i class="fa-solid fa-shield-halved mr-1.5 text-amber-600"></i> অ্যাডমিনের মাধ্যম
+                                    </button>
+                                ` : `
+                                    <a href="tel:${donor.phone}" class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-all shadow-sm" title="কল করুন">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </a>
+                                `}
+                            </div>
+                        </div>
+
+                        <!-- DIVIDER -->
+                        <div class="my-3 border-t border-rose-100"></div>
+
+                        <!-- SMART STATUS BADGES (SMART COMPACT UI) -->
+                        <div class="flex flex-wrap gap-1.5 text-[11px] font-medium">
+                            <span class="px-2.5 py-1 rounded-lg ${wholeStatus.ready ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}">
+                                🩸 হোল ব্লাড: ${wholeStatus.label}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-lg ${plasmaStatus.ready ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-orange-50 text-orange-700 border border-orange-200'}">
+                                🟠 প্লাজমা: ${plasmaStatus.label}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-lg ${plateletStatus.ready ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}">
+                                🟡 প্লেটলেট: ${plateletStatus.label}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // APPLY FILTERS LOGIC
+        function applyFilters() {
+            const group = document.getElementById('filter-group').value;
+            const upazila = document.getElementById('filter-upazila').value;
+            const dept = document.getElementById('filter-dept').value;
+            const batch = document.getElementById('filter-batch').value;
+
+            const filtered = sampleDonors.filter(donor => {
+                if(group && donor.group !== group) return false;
+                if(upazila && donor.upazila !== upazila) return false;
+                if(dept && donor.dept !== dept) return false;
+                if(batch && donor.batch !== batch) return false;
+
+                // Component Filter Check
+                if(currentActiveComponent !== 'all') {
+                    const st = getStatusInfo(
+                        currentActiveComponent === 'whole' ? donor.lastDonation :
+                        currentActiveComponent === 'plasma' ? donor.plasmaLast : donor.plateletLast,
+                        currentActiveComponent,
+                        donor.gender
+                    );
+                    if(!st.ready) return false;
+                }
+
+                return true;
+            });
+
+            renderDonors(filtered);
+        }
+
+        // CALCULATOR WIDGET LOGIC
+        function calculateEligibility() {
+            const gender = document.getElementById('calc-gender').value;
+            const lastDate = document.getElementById('calc-date').value;
+            const type = document.getElementById('calc-type').value;
+
+            const resultBox = document.getElementById('calc-result-box');
+            const icon = document.getElementById('calc-icon');
+            const title = document.getElementById('calc-status-title');
+            const desc = document.getElementById('calc-status-desc');
+            const nextDateDisplay = document.getElementById('calc-next-date');
+
+            if(!lastDate) {
+                title.innerText = "তারিখ সিলেক্ট করুন";
+                desc.innerText = "ক্যালকুলেট করতে আপনার শেষ ডোনেশনের তারিখ সিলেক্ট করুন।";
+                nextDateDisplay.innerText = "--";
+                return;
+            }
+
+            const st = getStatusInfo(lastDate, type, gender);
+
+            if(st.ready) {
+                resultBox.className = "bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between";
+                icon.className = "w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg";
+                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                title.className = "text-sm font-bold text-emerald-800";
+                title.innerText = "দান করতে পারবেন! (Eligible)";
+                desc.innerText = "আপনি স্বাস্থ্যবিধি মেনে রক্ত বা উপদান দান করতে প্রস্তুত।";
+                nextDateDisplay.innerHTML = `<span class="text-emerald-700">স্ট্যাটাস: প্রস্তুত</span>`;
+            } else {
+                resultBox.className = "bg-rose-50 border border-rose-200 rounded-xl p-3.5 flex items-center justify-between";
+                icon.className = "w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg";
+                icon.innerHTML = '<i class="fa-solid fa-clock"></i>';
+                title.className = "text-sm font-bold text-rose-800";
+                title.innerText = "এখনো সময় হয়নি (Not Eligible)";
+                desc.innerText = `দান করতে এখনও বিরতির প্রয়োজন রয়েছে।`;
+                nextDateDisplay.innerHTML = `<span class="text-rose-700">পরবর্তী দানের তারিখ:<br>${st.nextDateStr}</span>`;
+            }
+        }
+
+        // REGISTRATION FORM SUBMIT MOCK
+        function handleRegistration(e) {
+            e.preventDefault();
+            alert("সফলভাবে নিবন্ধন সম্পন্ন হয়েছে! ধন্যবাদ পঞ্চগড় জেলা ছাত্রকল্যাণ সংসদের সাথে যুক্ত থাকার জন্য।");
+            switchMainTab('find');
+        }
+    </script>
+</body>
+</html>
